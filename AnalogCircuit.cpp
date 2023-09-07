@@ -45,9 +45,9 @@ AnalogCircuit::AnalogCircuit(string filename) {//dump data to filename, initiali
 }
 
 void AnalogCircuit::run() {
-	component.push_back(new Capacitor(0.000100, 0.0, 1.0, 0.0, "C1"));//100uF, Green
-	component.push_back(new Inductor(0.020, 0.0, 0.0, 1.0, "L1"));//20mH, Blue
-	component.push_back(new Resistor(10, 1.0, 0.0, 0.0, "R1"));//10ohm, Red
+	//component.push_back(new Capacitor(0.000100, 0.0, 1.0, 0.0, "C1"));//100uF, Green
+	//component.push_back(new Inductor(0.020, 0.0, 0.0, 1.0, "L1"));//20mH, Blue
+	//component.push_back(new Resistor(10, 1.0, 0.0, 0.0, "R1"));//10ohm, Red
 
 	//Horizontal line
 
