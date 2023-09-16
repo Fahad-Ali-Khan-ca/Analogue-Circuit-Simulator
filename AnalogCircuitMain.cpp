@@ -28,12 +28,14 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(windowWidth, scalingFactor * windowHeight);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("ANASIM");
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glColor3f(1.0, 0.0, 0.0);
 	glPointSize(1.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0.0, windowWidth, 0.0, scalingFactor * windowHeight);
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	glutDisplayFunc(start);
 	glutMainLoop();
 

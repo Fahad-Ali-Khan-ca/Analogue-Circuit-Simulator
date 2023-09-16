@@ -5,6 +5,8 @@
 
 #ifndef _ANALOGCIRCUIT_H_
 #define _ANALOGCIRCUIT_H_
+#include <GL/glew.h>   //for GLEW library
+#include <GL/glut.h>
 
 #include <fstream>
 #include <list>
@@ -14,6 +16,7 @@
 #include <gl/glut.h>
 #include <gl/freeglut.h>
 #include "Component.h"
+
 
 extern int windowWidth, windowHeight;
 extern double scalingFactor;
