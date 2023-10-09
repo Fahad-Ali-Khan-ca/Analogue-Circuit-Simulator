@@ -9,6 +9,16 @@
 #define _COMPONENT_H_
 
 #include <iostream>
+#include <GL/glew.h>   //for GLEW library
+#include <GL/glut.h>
+
+#include <fstream>
+#include <list>
+#include <Windows.h>    
+#include <gl/GL.h>    
+#include <gl/GLU.h>    
+#include <gl/glut.h>
+#include <gl/freeglut.h>
 
 class Component {
 protected:

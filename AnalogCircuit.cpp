@@ -11,7 +11,6 @@
 
 #include "AnalogCircuit.h"
 #include "Capacitor.h"
-#include "Diode.h"
 #include "Inductor.h"
 #include "Resistor.h"
 
@@ -41,15 +40,22 @@ void AnalogCircuit::display(float R, float G, float B) {//draw a point on the sc
 	glFlush();
 }
 
-AnalogCircuit::AnalogCircuit(string filename) {//dump data to filename, initialize variables
+AnalogCircuit::AnalogCircuit(std::string filename) {//dump data to filename, initialize variables
+	fout.open(filename);
+	fout << setw(12) << "Time";
+	list<Component*>::iterator it;
+	for (it = component.begin(); it != component.end(); ++it) {
+		fout << setw(12) << (*it)->GetName();
+	}
+	fout << endl;
+
 }
 
+
 void AnalogCircuit::run() {
-//	component.push_back(new Capacitor(0.000100, 0.0, 1.0, 0.0, "C1"));//100uF, Green
-//	component.push_back(new Inductor(0.020, 0.0, 0.0, 1.0, "L1"));//20mH, Blue
-//	component.push_back(new Resistor(10, 1.0, 0.0, 0.0, "R1"));//10ohm, Red
-
-
+	component.push_back(new Resistor(10, 1.0, 0.0, 0.0, "R1"));//10ohm, Red
+	component.push_back(new Capacitor(0.000100, 0.0, 1.0, 0.0, "C1"));//100uF, Green
+	component.push_back(new Inductor(0.020, 0.0, 0.0, 1.0, "L1"));//20mH, Blue
 	double 	xpos = windowWidth / 6;
 	double ypos = (scalingFactor * windowHeight)/6;
 	int numMarkers = 10;  // Number of markers
@@ -93,18 +99,24 @@ void AnalogCircuit::run() {
 		glVertex2f(markerX, ypos + markerLength / 2);  // Ending point of the marker
 		glEnd();
 	}
+	//Display each component's name and colour
+		
+	list<Component*>::iterator it;
+	for (it = component.begin(); it != component.end(); ++it) {
+		std::string name = (*it)->GetName();
+
+
+	}
 	glFlush();
 
 
 
-	//Display each component's name and colour
 
 	//Run the simulation for the first 0.06 seconds (timeMax is 0.1 sec)
 	//Dump data to a file as well as display on the screen
 
 	for (double time = 0.0; time < 0.6 * timeMax; time += T) {
 		double V = Vpeak * sin(2.0 * M_PI * freq * time);
-
 		//...
 
 		CostFunctionV(I, V);
@@ -114,8 +126,8 @@ void AnalogCircuit::run() {
 	//Dump data to a file as well as display on the screen
 	for (double time = 0.6 * timeMax; time < timeMax; time += T) {
 		double V = 0.0;
-
-		//...
+		//
+		
 
 		CostFunctionV(I, V);
 	}

@@ -6,11 +6,6 @@
 #ifndef _ANALOGCIRCUIT_H_
 #define _ANALOGCIRCUIT_H_
 #include <GL/glew.h>   //for GLEW library
-#include <GL/glut.h>
-
-#include <fstream>
-#include <list>
-#include <Windows.h>    
 #include <gl/GL.h>    
 #include <gl/GLU.h>    
 #include <gl/glut.h>
