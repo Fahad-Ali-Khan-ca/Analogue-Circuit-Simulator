@@ -136,13 +136,15 @@
     <ClInclude Include="..\AnalogCircuit.h" />
     <ClInclude Include="..\Capacitor.h" />
     <ClInclude Include="..\component.h" />
-    <ClInclude Include="..\Diode.h" />
     <ClInclude Include="..\Inductor.h" />
     <ClInclude Include="..\Resistor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\AnalogCircuit.cpp" />
     <ClCompile Include="..\AnalogCircuitMain.cpp" />
+    <ClCompile Include="..\Capacitor.cpp" />
+    <ClCompile Include="..\Inductor.cpp" />
+    <ClCompile Include="..\Resistor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\RLC.dat" />

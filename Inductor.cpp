@@ -12,34 +12,45 @@ Inductor::Inductor(double inductance, double red, double green, double blue, std
 }
 
 double Inductor::GetVoltage(double current, double timestep) {
-    return current * inductance;
+    Vl = inductance * (current - C0) / timestep;
+    return Vl;
 }
 
 std::string Inductor::GetName() const {
     return name;
 }
 
-void Inductor::Display() {
-    std::cout << "Inductor: " << name << std::endl;
-	std::cout << "Inductance: " << inductance << std::endl;
-	std::cout << "Red: " << Red << std::endl;
-	std::cout << "Green: " << Green << std::endl;
-	std::cout << "Blue: " << Blue << std::endl;
+void Inductor::Display(double xpos, double ypos) {
+    //set color to the color of the component
+    glColor3f(Red, Green, Blue);
+    // Draw a point at the specified position
+    glBegin(GL_POINTS);
+    glVertex2f(xpos, ypos);
+    glEnd();
+
+    // Force execution of OpenGL commands in finite time
+    glFlush();
 }
 
-void Inductor::Update()
+void Inductor::Update(double current, double voltage)
 {
+    //set the current to the next time step
+    C0 = current;
 }
 
 double Inductor::GetInductance()
 {
-    return 0.0;
+    return this->inductance;
 }
 
 void Inductor::SetInductance(double l)
 {
+    	this->inductance = l;
 }
 
 
-
-
+void Inductor::SetColor() const
+{
+    // set the color to the color of the component
+    glColor3f(Red, Green, Blue);
+}

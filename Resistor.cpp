@@ -14,19 +14,34 @@ Resistor::Resistor(double resistance, double red, double green, double blue, std
 
 std::string Resistor::GetName() const
 {
-    return std::string();
+    return name;
 }
 
-void Resistor::Update()
+void Resistor::Update(double current, double voltage)
 {
+
 }
 
 double Resistor::GetVoltage(double current, double timestep) {
     return current * resistance;
 }
 
-void Resistor::Display()
+void Resistor::Display(double xpos, double ypos)
 {
+    //set color to the color of the component
+    glColor3f(Red, Green, Blue);
+    // Draw a point at the specified position
+    glBegin(GL_POINTS);
+    glVertex2f(xpos, ypos);
+    glEnd();
+
+    // Force execution of OpenGL commands in finite time
+    glFlush();
 }
 
+void Resistor::SetColor() const
+{
+    // set the color to the color of the component
+    glColor3f(Red, Green, Blue);
+}
 

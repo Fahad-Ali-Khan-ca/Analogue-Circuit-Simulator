@@ -11,7 +11,14 @@
 #include <gl/glut.h>
 #include <gl/freeglut.h>
 #include "Component.h"
-
+#include <iomanip>//setw
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>//M_PI
+#include <stdlib.h>//abs
+#include "Capacitor.h"
+#include "Inductor.h"
+#include "Resistor.h"
 
 extern int windowWidth, windowHeight;
 extern double scalingFactor;
@@ -26,6 +33,7 @@ class AnalogCircuit {
 	const double Vpeak = 10.0;//10V
 	const int xoffset = 50;
 	double I;
+	double accumulatedTime = 0.0;
 	std::list<Component*> component;//polymorphism with the STL
 	std::ofstream fout;
 public:

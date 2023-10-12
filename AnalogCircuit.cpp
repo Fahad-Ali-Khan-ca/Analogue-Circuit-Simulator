@@ -3,20 +3,11 @@
 // 20-May-22  M. Watler         Created.
 // 27-May-22  M. Watler         Added graphical display.
 
-#include <iomanip>//setw
-#include <iostream>
-#define _USE_MATH_DEFINES
-#include <math.h>//M_PI
-#include <stdlib.h>//abs
-
 #include "AnalogCircuit.h"
-#include "Capacitor.h"
-#include "Inductor.h"
-#include "Resistor.h"
 
 using namespace std;
 
-int xpos, ypos;
+double xpos, ypos;
 int windowWidth, windowHeight;
 double scalingFactor;
 
@@ -53,9 +44,13 @@ AnalogCircuit::AnalogCircuit(std::string filename) {//dump data to filename, ini
 
 
 void AnalogCircuit::run() {
+	accumulatedTime = 0.0;
+	//Initialize the circuit
 	component.push_back(new Resistor(10, 1.0, 0.0, 0.0, "R1"));//10ohm, Red
 	component.push_back(new Capacitor(0.000100, 0.0, 1.0, 0.0, "C1"));//100uF, Green
 	component.push_back(new Inductor(0.020, 0.0, 0.0, 1.0, "L1"));//20mH, Blue
+
+	//Initialize the graphics
 	double 	xpos = windowWidth / 6;
 	double ypos = (scalingFactor * windowHeight)/6;
 	int numMarkers = 10;  // Number of markers
@@ -69,14 +64,14 @@ void AnalogCircuit::run() {
 
 	//Horizontal line
 	glBegin(GL_LINES);
-	glColor3f(1.0, 1.0, 0.0);
-	glVertex2f(0, ypos);  // Starting point of the line (center)
-	glVertex2f(windowWidth, ypos);  // Ending point of the line (right edge)
+	glColor3f(1.0, 1.0, 1.0);
+	glVertex2f(0, centerY);  // Starting point of the line (center)
+	glVertex2f(windowWidth, centerY);  // Ending point of the line (right edge)
 	glEnd();
 
 	//Vertical line
 	glBegin(GL_LINES);
-	glColor3f(0.0, 1.0, 0.0);
+	glColor3f(0.0, 1.0, 1.0);
 	glVertex2f(xpos, 0);  // Starting point of the line (center)
 	glVertex2f(xpos, scalingFactor * windowHeight);  // Ending point of the line (top edge)
 	glEnd();
@@ -94,32 +89,47 @@ void AnalogCircuit::run() {
 	for (int i = 0; i <= numMarkers; i++) {
 		float markerX = i * intervalY;
 		glBegin(GL_LINES);
-		glColor3f(1.0, 1.0, 0.0);
-		glVertex2f(markerX,ypos - markerLength / 2 );  // Starting point of the marker
-		glVertex2f(markerX, ypos + markerLength / 2);  // Ending point of the marker
+		glColor3f(1.0, 1.0, 1.0);
+		glVertex2f(markerX,centerY- markerLength / 2 );  // Starting point of the marker
+		glVertex2f(markerX, centerY + markerLength / 2);  // Ending point of the marker
 		glEnd();
 	}
 	//Display each component's name and colour
-		
+	double nameXPos = 10;  // starting x-position for component names
+	double nameYPos = windowHeight - 30;  // starting y-position (from top)
+	double nameSpacing = 30;  // space between each component name
+	double lineLength = 50;  // length of the color line
+	double lineOffsetX =30;  // x-offset from the name to the start of the line
+	double lineOffsetY = 5;  // y-offset to center the line vertically relative to the text
 	list<Component*>::iterator it;
 	for (it = component.begin(); it != component.end(); ++it) {
 		std::string name = (*it)->GetName();
-
-
+		// Display the name
+		glColor3f(1.0, 1.0, 1.0);
+		glRasterPos2f(nameXPos, nameYPos);
+		for (char c : name) {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+		}
+		(*it)->SetColor();
+		glBegin(GL_LINES);
+		glVertex2f(nameXPos + lineOffsetX , nameYPos + lineOffsetY);  // Starting point of the line
+		glVertex2f(nameXPos + lineOffsetX + lineLength, nameYPos + lineOffsetY);  // Ending point of the line
+		//clear color
+		glEnd();
+		// Adjust position for next component name
+		nameYPos -= nameSpacing;
 	}
+
 	glFlush();
-
-
-
-
 	//Run the simulation for the first 0.06 seconds (timeMax is 0.1 sec)
 	//Dump data to a file as well as display on the screen
 
 	for (double time = 0.0; time < 0.6 * timeMax; time += T) {
 		double V = Vpeak * sin(2.0 * M_PI * freq * time);
 		//...
-
+		//display(1.0,1.0,1.0);
 		CostFunctionV(I, V);
+		accumulatedTime += T;
 	}
 
 	//Run the simulation to the end (timeMax is 0.1 sec)
@@ -128,8 +138,9 @@ void AnalogCircuit::run() {
 		double V = 0.0;
 		//
 		
-
+		//display(1.0, 1.0, 1.0);
 		CostFunctionV(I, V);
+		accumulatedTime += T;
 	}
 }
 
@@ -169,8 +180,10 @@ void AnalogCircuit::CostFunctionV(double& current, double voltage) {
 	for (it = component.begin(); it != component.end(); ++it) {
 		fout << setw(12) << (*it)->GetVoltage(I1, T);
 		ypos = (windowHeight * (*it)->GetVoltage(I1, T) / Vpeak) / 2.0 + scalingFactor * windowHeight / 2.0;
-		(*it)->Display();
-		(*it)->Update();
+		//xpos is the time in seconds it should be the timestep
+		xpos =  accumulatedTime * windowWidth / timeMax;
+		(*it)->Display(xpos, ypos);
+		(*it)->Update(I1,voltage);
 	}
 	fout << endl;
 

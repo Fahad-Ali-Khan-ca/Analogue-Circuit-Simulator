@@ -28,9 +28,10 @@ protected:
 	std::string name;
 public:
 	virtual std::string GetName() const = 0;
-	virtual void Update() = 0;
+	virtual void Update(double current, double voltage) = 0;
 	virtual double GetVoltage(double _current, double timestep)=0;
-	virtual void Display() = 0;
+	virtual void Display(double xpos, double ypos) = 0;
+	virtual void SetColor() const = 0;
 };
 
 #endif// _COMPONENT_H_

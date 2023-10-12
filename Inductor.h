@@ -6,18 +6,20 @@
 #include "component.h"
 class Inductor : public Component {
 	double inductance;
+	double Vl = 0.0;
+	double C0 = 0.0;  // to store next time step
 	public:
 		Inductor(double inductance, double red, double green, double blue, std::string name);
 		double GetVoltage(double current, double timestep) override;
 		std::string GetName() const override;
 		//display
-		void Display() override;
+		void Display(double xpos, double ypos) override;
 		//update	
-		void Update() override;
+		void Update(double current, double voltage) override;
 		//getters
 		double GetInductance();
 		//setters
 		void SetInductance(double l);
-
+		void SetColor() const override;
 };
 #endif // !_INDUCTOR_H_
