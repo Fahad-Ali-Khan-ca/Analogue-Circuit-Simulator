@@ -39,11 +39,11 @@ AnalogCircuit::AnalogCircuit(std::string filename) {//dump data to filename, ini
 		fout << setw(12) << (*it)->GetName();
 	}
 	fout << endl;
-
 }
 
 
 void AnalogCircuit::run() {
+	
 	accumulatedTime = 0.0;
 	//Initialize the circuit
 	component.push_back(new Resistor(10, 1.0, 0.0, 0.0, "R1"));//10ohm, Red
@@ -94,6 +94,7 @@ void AnalogCircuit::run() {
 		glVertex2f(markerX, centerY + markerLength / 2);  // Ending point of the marker
 		glEnd();
 	}
+
 	//Display each component's name and colour
 	double nameXPos = 10;  // starting x-position for component names
 	double nameYPos = windowHeight - 30;  // starting y-position (from top)
@@ -127,7 +128,6 @@ void AnalogCircuit::run() {
 	for (double time = 0.0; time < 0.6 * timeMax; time += T) {
 		double V = Vpeak * sin(2.0 * M_PI * freq * time);
 		//...
-		//display(1.0,1.0,1.0);
 		CostFunctionV(I, V);
 		accumulatedTime += T;
 	}
