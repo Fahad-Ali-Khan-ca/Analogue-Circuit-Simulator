@@ -57,7 +57,6 @@ void AnalogCircuit::run() {
 	for (double time = 0.0; time < 0.6 * timeMax; time += T) {
 		double V = Vpeak * sin(2.0 * M_PI * freq * time);
 		//...
-
 		accumulatedTime += T;
 		ypos = (windowHeight * V / Vpeak) / 2.0 + scalingFactor * windowHeight / 2.0;
 		xpos = (time * windowWidth / timeMax) + off_set;
@@ -214,7 +213,7 @@ void AnalogCircuit::drawStaticElements()
 }
 
 AnalogCircuit::~AnalogCircuit() {//perform cleanup
-	fout.close();
+	fout.close(); // just in case
 	list<Component*>::iterator it;
 	for (it = component.begin(); it != component.end(); ++it) {
 		delete (*it);

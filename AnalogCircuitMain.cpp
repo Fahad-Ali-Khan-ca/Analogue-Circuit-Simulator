@@ -35,7 +35,6 @@ int main(int argc, char** argv) {
 	glLoadIdentity();
 	gluOrtho2D(0.0, windowWidth, 0.0, scalingFactor * windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT);
-
 	glutDisplayFunc(start);
 	glutMainLoop();
 
