@@ -10,6 +10,7 @@ using namespace std;
 double xpos, ypos;
 int windowWidth, windowHeight;
 double scalingFactor;
+double accumulatedTime = 0.0;
 
 void start() {
 	cout << "BEGIN" << endl;
@@ -43,24 +44,33 @@ AnalogCircuit::AnalogCircuit(std::string filename) {//dump data to filename, ini
 
 
 void AnalogCircuit::run() {
-	
+
+	xpos = windowWidth / 6;
+	ypos = (scalingFactor * windowHeight) / 6;
+	int numMarkers = 10;  // Number of markers
+	float markerLength = 20.0;  // Length of each marker
+	float intervalX = (scalingFactor * windowHeight) / numMarkers;  // Space between markers for horizontal line
+	float intervalY = windowWidth / numMarkers;
+	// Calculate center coordinates
+	float centerX = windowWidth / 2.0;
+	float centerY = (scalingFactor * windowHeight) / 2.0;
+
+	double nameXPos = 10;  // starting x-position for component names
+	double nameYPos = windowHeight - 30;  // starting y-position (from top)
+	double nameSpacing = 30;  // space between each component name
+	double lineLength = 50;  // length of the color line
+	double lineOffsetX = 30;  // x-offset from the name to the start of the line
+	double lineOffsetY = 5;  // y-offset to center the line vertically relative to the text
+
 	accumulatedTime = 0.0;
+
 	//Initialize the circuit
 	component.push_back(new Resistor(10, 1.0, 0.0, 0.0, "R1"));//10ohm, Red
 	component.push_back(new Capacitor(0.000100, 0.0, 1.0, 0.0, "C1"));//100uF, Green
 	component.push_back(new Inductor(0.020, 0.0, 0.0, 1.0, "L1"));//20mH, Blue
 
-	//Initialize the graphics
-	double 	xpos = windowWidth / 6;
-	double ypos = (scalingFactor * windowHeight)/6;
-	int numMarkers = 10;  // Number of markers
-	float markerLength = 20.0;  // Length of each marker
-	float intervalX = (scalingFactor * windowHeight) / numMarkers;  // Space between markers for horizontal line
-	float intervalY = windowWidth / numMarkers;
+	
 
-	// Calculate center coordinates
-	float centerX = windowWidth / 2.0;
-	float centerY = (scalingFactor * windowHeight) / 2.0;
 
 	//Horizontal line
 	glBegin(GL_LINES);
@@ -96,12 +106,7 @@ void AnalogCircuit::run() {
 	}
 
 	//Display each component's name and colour
-	double nameXPos = 10;  // starting x-position for component names
-	double nameYPos = windowHeight - 30;  // starting y-position (from top)
-	double nameSpacing = 30;  // space between each component name
-	double lineLength = 50;  // length of the color line
-	double lineOffsetX =30;  // x-offset from the name to the start of the line
-	double lineOffsetY = 5;  // y-offset to center the line vertically relative to the text
+
 	list<Component*>::iterator it;
 	for (it = component.begin(); it != component.end(); ++it) {
 		std::string name = (*it)->GetName();
@@ -122,6 +127,7 @@ void AnalogCircuit::run() {
 	}
 
 	glFlush();
+
 	//Run the simulation for the first 0.06 seconds (timeMax is 0.1 sec)
 	//Dump data to a file as well as display on the screen
 
@@ -180,8 +186,12 @@ void AnalogCircuit::CostFunctionV(double& current, double voltage) {
 	for (it = component.begin(); it != component.end(); ++it) {
 		fout << setw(12) << (*it)->GetVoltage(I1, T);
 		ypos = (windowHeight * (*it)->GetVoltage(I1, T) / Vpeak) / 2.0 + scalingFactor * windowHeight / 2.0;
+		std::cout << "ypos  " << ypos << std::endl;
+
 		//xpos is the time in seconds it should be the timestep
 		xpos =  accumulatedTime * windowWidth / timeMax;
+		
+		std::cout << "xpos " << xpos << std::endl;
 		(*it)->Display(xpos, ypos);
 		(*it)->Update(I1,voltage);
 	}
@@ -191,4 +201,9 @@ void AnalogCircuit::CostFunctionV(double& current, double voltage) {
 }
 
 AnalogCircuit::~AnalogCircuit() {//perform cleanup
+	fout.close();
+	list<Component*>::iterator it;
+	for (it = component.begin(); it != component.end(); ++it) {
+		delete (*it);
+	}
 }

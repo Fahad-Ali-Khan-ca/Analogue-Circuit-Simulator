@@ -36,7 +36,7 @@ void Capacitor::Display(double xpos, double ypos)
 
 void Capacitor::Update(double current, double voltage)
 {
-	double Vc = voltage;
+	 Vc = voltage;
 }
 
 double Capacitor::GetInductance()

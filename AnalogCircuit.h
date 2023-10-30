@@ -32,8 +32,7 @@ class AnalogCircuit {
 	const double freq = 50;//50Hz
 	const double Vpeak = 10.0;//10V
 	const int xoffset = 50;
-	double I;
-	double accumulatedTime = 0.0;
+	double I =0.0;  //current 
 	std::list<Component*> component;//polymorphism with the STL
 	std::ofstream fout;
 public:

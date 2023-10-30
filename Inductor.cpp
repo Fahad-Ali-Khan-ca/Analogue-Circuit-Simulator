@@ -13,6 +13,7 @@ Inductor::Inductor(double inductance, double red, double green, double blue, std
 
 double Inductor::GetVoltage(double current, double timestep) {
     Vl = inductance * (current - C0) / timestep;
+    C0 = current;
     return Vl;
 }
 
