@@ -40,6 +40,8 @@ public:
 	static void display(float R, float G, float B);//display output data on the screen
 	void run();
 	void CostFunctionV(double& current, double V);
+	void initializeCircuit(); // to initialize the componenets
+	void drawStaticElements(); // to draw the Static Elemenets
 	~AnalogCircuit();
 };
 
