@@ -12,8 +12,8 @@ Inductor::Inductor(double inductance, double red, double green, double blue, std
 }
 
 double Inductor::GetVoltage(double current, double timestep) {
-    Vl = inductance * (current - C0) / timestep;
-    C0 = current;
+    double Vl = inductance * (current - C0) / timestep;
+    this->current = current;
     return Vl;
 }
 
@@ -33,10 +33,10 @@ void Inductor::Display(double xpos, double ypos) {
     glFlush();
 }
 
-void Inductor::Update(double current, double voltage)
-{
+void Inductor::Update()
+{   
     //set the current to the next time step
-    C0 = current;
+    C0 = this->current;
 }
 
 double Inductor::GetInductance()

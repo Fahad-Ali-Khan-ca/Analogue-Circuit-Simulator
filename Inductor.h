@@ -6,7 +6,7 @@
 #include "component.h"
 class Inductor : public Component {
 	double inductance;
-	double Vl = 0.0;
+	double current = 0.0;
 	double C0 = 0.0;  // to store next time step
 	public:
 		Inductor(double inductance, double red, double green, double blue, std::string name);
@@ -15,7 +15,7 @@ class Inductor : public Component {
 		//display
 		void Display(double xpos, double ypos) override;
 		//update	
-		void Update(double current, double voltage) override;
+		void Update() override;
 		//getters
 		double GetInductance();
 		//setters

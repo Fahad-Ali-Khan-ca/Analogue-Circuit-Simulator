@@ -7,15 +7,16 @@
 class Capacitor : public Component {
     double capacitance;
     std::string name;
-    double Vc = 0.0;
+    double V0 = 0.0;
+    double voltage = 0.0;
     public:
         Capacitor(double capacitance, double red, double green, double blue, std::string name);
         double GetVoltage(double current, double timestep) override;
         std::string GetName() const override;
         //display
-        void Display(double current, double voltage) override;
+        void Display(double xpos, double ypos) override;
         //update
-        void Update(double xpos, double ypos ) override;
+        void Update( ) override;
         //getters
         double GetInductance();
         void SetColor() const override;

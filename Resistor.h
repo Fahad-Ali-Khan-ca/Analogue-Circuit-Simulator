@@ -9,7 +9,7 @@ class Resistor : public Component {
 public:
     Resistor(double resistance, double red, double green, double blue, std::string name);
     std::string GetName() const override;
-    void Update(double current, double voltage) override;
+    void Update() override;
     double GetVoltage(double current, double timestep) override;
     void Display(double xpos, double ypos) override;
     void SetColor() const override;

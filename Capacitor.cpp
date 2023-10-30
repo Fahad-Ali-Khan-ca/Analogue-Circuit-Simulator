@@ -12,7 +12,8 @@ Capacitor::Capacitor(double capacitance, double red, double green, double blue, 
 
 double Capacitor::GetVoltage(double current, double timestep)
 {
-	double voltage = Vc + (current * timestep) / capacitance;
+	double voltage = V0 + (current * timestep) / capacitance;
+	this->voltage = voltage;
 	return voltage;
 }
 
@@ -34,9 +35,9 @@ void Capacitor::Display(double xpos, double ypos)
 	glFlush();
 }
 
-void Capacitor::Update(double current, double voltage)
+void Capacitor::Update()
 {
-	 Vc = voltage;
+	 V0 = this->voltage;
 }
 
 double Capacitor::GetInductance()

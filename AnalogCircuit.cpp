@@ -10,6 +10,7 @@ using namespace std;
 double xpos, ypos;
 int windowWidth, windowHeight;
 double scalingFactor;
+double off_set = 170.00;
 double accumulatedTime = 0.0;
 
 void start() {
@@ -45,8 +46,8 @@ AnalogCircuit::AnalogCircuit(std::string filename) {//dump data to filename, ini
 
 void AnalogCircuit::run() {
 
-	xpos = windowWidth / 6;
-	ypos = (scalingFactor * windowHeight) / 6;
+	double x = windowWidth / 6;
+	double y = (scalingFactor * windowHeight) / 6;
 	int numMarkers = 10;  // Number of markers
 	float markerLength = 20.0;  // Length of each marker
 	float intervalX = (scalingFactor * windowHeight) / numMarkers;  // Space between markers for horizontal line
@@ -82,16 +83,16 @@ void AnalogCircuit::run() {
 	//Vertical line
 	glBegin(GL_LINES);
 	glColor3f(0.0, 1.0, 1.0);
-	glVertex2f(xpos, 0);  // Starting point of the line (center)
-	glVertex2f(xpos, scalingFactor * windowHeight);  // Ending point of the line (top edge)
+	glVertex2f(x, 0);  // Starting point of the line (center)
+	glVertex2f(x, scalingFactor * windowHeight);  // Ending point of the line (top edge)
 	glEnd();
 
 	//Horizontal line markers
 	for (int i = 0; i <= numMarkers; i++) {
 		float markerY = i * intervalX;
 		glBegin(GL_LINES);
-		glVertex2f(xpos - markerLength / 2, markerY);  // Starting point of the marker
-		glVertex2f(xpos + markerLength / 2, markerY);  // Ending point of the marker
+		glVertex2f(x - markerLength / 2, markerY);  // Starting point of the marker
+		glVertex2f(x + markerLength / 2, markerY);  // Ending point of the marker
 		glEnd();
 	}
 
@@ -134,19 +135,25 @@ void AnalogCircuit::run() {
 	for (double time = 0.0; time < 0.6 * timeMax; time += T) {
 		double V = Vpeak * sin(2.0 * M_PI * freq * time);
 		//...
-		CostFunctionV(I, V);
+
 		accumulatedTime += T;
+		ypos = (windowHeight * V / Vpeak) / 2.0 + scalingFactor * windowHeight / 2.0;
+		xpos = (time * windowWidth / timeMax) + off_set;
+		display(1.0, 1.0, 1.0); // Plot the point with the desired color
+		CostFunctionV(I, V);
 	}
 
 	//Run the simulation to the end (timeMax is 0.1 sec)
 	//Dump data to a file as well as display on the screen
 	for (double time = 0.6 * timeMax; time < timeMax; time += T) {
 		double V = 0.0;
-		//
 		
-		//display(1.0, 1.0, 1.0);
-		CostFunctionV(I, V);
+		ypos = (windowHeight * V / Vpeak) / 2.0 + scalingFactor * windowHeight / 2.0;
+		xpos = (time * windowWidth / timeMax) + off_set;
+		display(1.0, 1.0, 1.0); // Plot the point with the desired color
 		accumulatedTime += T;
+		CostFunctionV(I, V);
+
 	}
 }
 
@@ -157,6 +164,7 @@ void AnalogCircuit::CostFunctionV(double& current, double voltage) {
 	double alpha = 1.0;
 
 	do {
+
 		double sumVoltage = 0.0;
 		list<Component*>::iterator it;
 		for (it = component.begin(); it != component.end(); ++it) {
@@ -186,14 +194,10 @@ void AnalogCircuit::CostFunctionV(double& current, double voltage) {
 	for (it = component.begin(); it != component.end(); ++it) {
 		fout << setw(12) << (*it)->GetVoltage(I1, T);
 		ypos = (windowHeight * (*it)->GetVoltage(I1, T) / Vpeak) / 2.0 + scalingFactor * windowHeight / 2.0;
-		std::cout << "ypos  " << ypos << std::endl;
-
-		//xpos is the time in seconds it should be the timestep
-		xpos =  accumulatedTime * windowWidth / timeMax;
+		xpos =  (accumulatedTime * windowWidth / timeMax)+ off_set;
 		
-		std::cout << "xpos " << xpos << std::endl;
 		(*it)->Display(xpos, ypos);
-		(*it)->Update(I1,voltage);
+		(*it)->Update();
 	}
 	fout << endl;
 

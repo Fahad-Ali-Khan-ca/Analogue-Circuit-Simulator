@@ -17,9 +17,9 @@ std::string Resistor::GetName() const
     return name;
 }
 
-void Resistor::Update(double current, double voltage)
+void Resistor::Update()
 {
-
+    //pass
 }
 
 double Resistor::GetVoltage(double current, double timestep) {
