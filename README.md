@@ -39,7 +39,9 @@ The graphics library used for this assignment is OpenGL. The following link expl
   - Click on the prompt (where it says PM), and type: Install-Package nupengl.core Then press enter.
   - A manual of OpenGL API's can be found at: [OpenGL Documentation](https://code.nabla.net/doc/OpenGL/index.html).
 
+## End Result
 
+![image](https://github.com/Fahad-Ali-Khan-ca/Analogue-Circuit-Simulator/assets/97141637/6a223174-b0a7-4274-ae51-a796cdf6213a)
 
 ## Contributing
 
